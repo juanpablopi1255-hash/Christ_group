@@ -27,21 +27,34 @@ style({
         margin: "0",
         padding: "0",
         overflow: "hidden",
+        boxSizing: "border-box",
     }
 });
 
 
 // ============================================================
-// 2. ESTRUCTURA
+// 2. ESTRUCTURA PRINCIPAL
 // ============================================================
 
 const columnaBody = columna({
     padre: body
 });
 
+style({
+    elementos: [columnaBody],
+    estilos: {
+        width: "100%",
+        height: "100%",
+        minHeight: "0",
+        boxSizing: "border-box",
+        padding: "10px",
+    }
+});
+
+
 const titulo = div({
     padre: columnaBody,
-    peso: "1f"
+    peso: "0.8f"
 });
 
 const listas = div({
@@ -55,9 +68,11 @@ const botones = div({
 });
 
 style({
-    elementos: [columnaBody, listas, botones],
+    elementos: [titulo, listas, botones],
     estilos: {
         minHeight: "0",
+        width: "100%",
+        boxSizing: "border-box",
     }
 });
 
@@ -76,6 +91,7 @@ style({
     estilos: {
         textAlign: "center",
         fontSize: "40px",
+        margin: "10px 0",
     }
 });
 
@@ -88,6 +104,18 @@ const filaListas = fila({
     padre: listas
 });
 
+style({
+    elementos: [filaListas],
+    estilos: {
+        width: "100%",
+        height: "100%",
+        minHeight: "0",
+        boxSizing: "border-box",
+        gap: "10px",
+    }
+});
+
+
 const botonesLista = columna({
     padre: filaListas,
     peso: "1f"
@@ -95,13 +123,14 @@ const botonesLista = columna({
 
 const lista = columna({
     padre: filaListas,
-    peso: "1f"
+    peso: "2f"
 });
 
 style({
-    elementos: [filaListas, botonesLista, lista],
+    elementos: [botonesLista, lista],
     estilos: {
         minHeight: "0",
+        boxSizing: "border-box",
     }
 });
 
@@ -132,16 +161,25 @@ style({
     elementos: [lista],
     estilos: {
         textAlign: "left",
-        marginLeft: "10px",
-        marginRight: "10px",
+
+        marginLeft: "5px",
+        marginRight: "5px",
+
         border: "4px solid black",
+
         width: "100%",
         height: "100%",
+
         background: "white",
+
         boxSizing: "border-box",
+
         minHeight: "0",
+
         overflowY: "auto",
         overflowX: "hidden",
+
+        borderRadius: "4px",
     }
 });
 
@@ -153,6 +191,7 @@ style({
 const botonCasadosA = button({
     padre: botonesLista,
     contenido: "Casados A: 0",
+
     funcionalidad: {
         click: () => {
             anadirALaLista(casadosA);
@@ -160,9 +199,11 @@ const botonCasadosA = button({
     }
 });
 
+
 const botonCasadosB = button({
     padre: botonesLista,
     contenido: "Casados B: 0",
+
     funcionalidad: {
         click: () => {
             anadirALaLista(casadosB);
@@ -170,9 +211,11 @@ const botonCasadosB = button({
     }
 });
 
+
 const botonSolterosA = button({
     padre: botonesLista,
     contenido: "Solteros A: 0",
+
     funcionalidad: {
         click: () => {
             anadirALaLista(solterosA);
@@ -180,9 +223,11 @@ const botonSolterosA = button({
     }
 });
 
+
 const botonSolterosB = button({
     padre: botonesLista,
     contenido: "Solteros B: 0",
+
     funcionalidad: {
         click: () => {
             anadirALaLista(solterosB);
@@ -237,43 +282,54 @@ let casadosA = crearEstado({
     valorInicial: [...originalesCasadosA],
 
     funcionDeActualizacion: (nuevoValor) => {
+
         mod({
             elemento: botonCasadosA,
             contenido: `Casados A: ${nuevoValor.length}`
         });
+
     }
 });
+
 
 let casadosB = crearEstado({
     valorInicial: [...originalesCasadosB],
 
     funcionDeActualizacion: (nuevoValor) => {
+
         mod({
             elemento: botonCasadosB,
             contenido: `Casados B: ${nuevoValor.length}`
         });
+
     }
 });
+
 
 let solterosA = crearEstado({
     valorInicial: [...originalesSolterosA],
 
     funcionDeActualizacion: (nuevoValor) => {
+
         mod({
             elemento: botonSolterosA,
             contenido: `Solteros A: ${nuevoValor.length}`
         });
+
     }
 });
+
 
 let solterosB = crearEstado({
     valorInicial: [...originalesSolterosB],
 
     funcionDeActualizacion: (nuevoValor) => {
+
         mod({
             elemento: botonSolterosB,
             contenido: `Solteros B: ${nuevoValor.length}`
         });
+
     }
 });
 
@@ -314,6 +370,7 @@ function crearGrupo(numero) {
         }
     });
 
+
     const tituloGrupo = p({
         padre: contenedorGrupo,
         contenido: `Grupo ${numero}`
@@ -328,6 +385,7 @@ function crearGrupo(numero) {
         }
     });
 
+
     const nuevaLista = ol({
         padre: contenedorGrupo
     });
@@ -336,8 +394,12 @@ function crearGrupo(numero) {
         elementos: [nuevaLista],
         estilos: {
             fontSize: "20px",
+            paddingLeft: "30px",
+            marginTop: "5px",
+            marginBottom: "15px",
         }
     });
+
 
     return {
         contenedor: contenedorGrupo,
@@ -369,7 +431,7 @@ function cambiarDeGrupo() {
     grupoActualElemento = nuevoGrupo.contenedor;
     listaActual = nuevoGrupo.lista;
 
-    // Guardamos que se creó un grupo
+
     historial.push({
         tipo: "grupo",
         elemento: nuevoGrupo.contenedor,
@@ -386,23 +448,31 @@ function anadirALaLista(grupo) {
 
     if (grupo.valor.length === 0) return;
 
+
     const indice =
-        Math.floor(Math.random() * grupo.valor.length);
+        Math.floor(
+            Math.random() * grupo.valor.length
+        );
+
 
     const miembro =
         grupo.valor[indice];
+
 
     const elemento = li({
         padre: listaActual,
         contenido: miembro
     });
 
+
     style({
         elementos: [elemento],
         estilos: {
             fontSize: "20px",
+            marginBottom: "5px",
         }
     });
+
 
     historial.push({
         tipo: "miembro",
@@ -412,8 +482,11 @@ function anadirALaLista(grupo) {
         elemento: elemento
     });
 
+
     grupo.valor =
-        grupo.valor.filter((_, i) => i !== indice);
+        grupo.valor.filter(
+            (_, i) => i !== indice
+        );
 }
 
 
@@ -425,7 +498,9 @@ function deshacer() {
 
     if (historial.length === 0) return;
 
-    const ultimaAccion = historial.pop();
+
+    const ultimaAccion =
+        historial.pop();
 
 
     // --------------------------------------------------------
@@ -434,15 +509,22 @@ function deshacer() {
 
     if (ultimaAccion.tipo === "miembro") {
 
-        const grupo = ultimaAccion.grupo;
-        const miembro = ultimaAccion.miembro;
-        const indice = ultimaAccion.indice;
+        const grupo =
+            ultimaAccion.grupo;
+
+        const miembro =
+            ultimaAccion.miembro;
+
+        const indice =
+            ultimaAccion.indice;
+
 
         grupo.valor = [
             ...grupo.valor.slice(0, indice),
             miembro,
             ...grupo.valor.slice(indice)
         ];
+
 
         ultimaAccion.elemento.remove();
 
@@ -460,19 +542,23 @@ function deshacer() {
 
         grupo_actual--;
 
+
         const grupos =
             [...listaGrupos.children];
+
 
         if (grupos.length > 0) {
 
             const ultimoGrupo =
                 grupos[grupos.length - 1];
 
-            grupoActualElemento = ultimoGrupo;
+
+            grupoActualElemento =
+                ultimoGrupo;
+
 
             listaActual =
                 ultimoGrupo.querySelector("ol");
-
         }
     }
 }
@@ -486,19 +572,34 @@ function reiniciar() {
 
     listaGrupos.innerHTML = "";
 
-    casadosA.valor = [...originalesCasadosA];
-    casadosB.valor = [...originalesCasadosB];
-    solterosA.valor = [...originalesSolterosA];
-    solterosB.valor = [...originalesSolterosB];
+
+    casadosA.valor =
+        [...originalesCasadosA];
+
+    casadosB.valor =
+        [...originalesCasadosB];
+
+    solterosA.valor =
+        [...originalesSolterosA];
+
+    solterosB.valor =
+        [...originalesSolterosB];
+
 
     historial.length = 0;
 
     grupo_actual = 1;
 
-    const primerGrupo = crearGrupo(1);
 
-    grupoActualElemento = primerGrupo.contenedor;
-    listaActual = primerGrupo.lista;
+    const primerGrupo =
+        crearGrupo(1);
+
+
+    grupoActualElemento =
+        primerGrupo.contenedor;
+
+    listaActual =
+        primerGrupo.lista;
 }
 
 
@@ -511,18 +612,24 @@ function obtenerTextoGrupo(grupoElemento) {
     const tituloGrupo =
         grupoElemento.querySelector("p");
 
+
     const integrantes =
         [...grupoElemento.querySelectorAll("ol li")];
+
 
     let texto =
         `${tituloGrupo.textContent}\n\n`;
 
-    integrantes.forEach((elemento, indice) => {
 
-        texto +=
-            `${indice + 1}. ${elemento.textContent}\n`;
+    integrantes.forEach(
+        (elemento, indice) => {
 
-    });
+            texto +=
+                `${indice + 1}. ${elemento.textContent}\n`;
+
+        }
+    );
+
 
     return texto.trim();
 }
@@ -537,10 +644,12 @@ function compartirEnWhatsApp(texto) {
     const mensaje =
         encodeURIComponent(texto);
 
+
     const esMovil =
         /Android|iPhone|iPad|iPod/i.test(
             navigator.userAgent
         );
+
 
     if (esMovil) {
 
@@ -565,12 +674,14 @@ function compartirGrupo() {
     const grupos =
         [...listaGrupos.children];
 
+
     if (grupos.length === 0) return;
 
 
     const fondo = div({
         padre: body
     });
+
 
     style({
         elementos: [fondo],
@@ -590,6 +701,7 @@ function compartirGrupo() {
         padre: fondo
     });
 
+
     style({
         elementos: [ventana],
         estilos: {
@@ -597,13 +709,19 @@ function compartirGrupo() {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: "80%",
+
+            width: "calc(100% - 40px)",
             maxWidth: "400px",
+
             background: "white",
             border: "3px solid #064C9C",
+
             padding: "20px",
+
             boxSizing: "border-box",
+
             borderRadius: "10px",
+
             textAlign: "center",
         }
     });
@@ -614,6 +732,7 @@ function compartirGrupo() {
         contenido: "¿Qué grupo quieres compartir?"
     });
 
+
     style({
         elementos: [tituloVentana],
         estilos: {
@@ -623,52 +742,69 @@ function compartirGrupo() {
     });
 
 
-    grupos.forEach((grupoElemento, indice) => {
+    grupos.forEach(
+        (grupoElemento, indice) => {
 
-        const botonGrupo = button({
-            padre: ventana,
-            contenido: `Grupo ${indice + 1}`,
+            const botonGrupo = button({
 
-            funcionalidad: {
-                click: () => {
+                padre: ventana,
 
-                    const texto =
-                        obtenerTextoGrupo(
-                            grupoElemento
+                contenido:
+                    `Grupo ${indice + 1}`,
+
+                funcionalidad: {
+
+                    click: () => {
+
+                        const texto =
+                            obtenerTextoGrupo(
+                                grupoElemento
+                            );
+
+
+                        fondo.remove();
+
+
+                        compartirEnWhatsApp(
+                            texto
                         );
-
-                    fondo.remove();
-
-                    compartirEnWhatsApp(texto);
+                    }
                 }
-            }
-        });
+            });
 
-        style({
-            elementos: [botonGrupo],
-            estilos: {
-                display: "block",
-                width: "100%",
-                margin: "10px 0",
-                padding: "10px",
-                background: "#064C9C",
-                color: "white",
-                fontSize: "18px",
-            }
-        });
-    });
+
+            style({
+                elementos: [botonGrupo],
+                estilos: {
+                    display: "block",
+                    width: "100%",
+                    margin: "10px 0",
+                    padding: "10px",
+                    background: "#064C9C",
+                    color: "white",
+                    fontSize: "18px",
+                    boxSizing: "border-box",
+                }
+            });
+        }
+    );
 
 
     const botonCancelar = button({
+
         padre: ventana,
+
         contenido: "Cancelar",
 
         funcionalidad: {
+
             click: () => {
                 fondo.remove();
             }
+
         }
     });
+
 
     style({
         elementos: [botonCancelar],
@@ -679,6 +815,7 @@ function compartirGrupo() {
             background: "#777",
             color: "white",
             fontSize: "18px",
+            boxSizing: "border-box",
         }
     });
 }
@@ -692,14 +829,29 @@ const columna_principal_botones = columna({
     padre: botones
 });
 
+
 const fila1 = fila({
     padre: columna_principal_botones,
     peso: "1f"
 });
 
+
 const fila2 = fila({
     padre: columna_principal_botones,
     peso: "1f"
+});
+
+
+style({
+    elementos: [
+        columna_principal_botones,
+        fila1,
+        fila2
+    ],
+    estilos: {
+        minHeight: "0",
+        width: "100%",
+    }
 });
 
 
@@ -716,6 +868,7 @@ const pasarDeGrupoBoton = button({
         click: cambiarDeGrupo
     }
 });
+
 
 const compartirBoton = button({
     contenido: "compartir",
@@ -742,6 +895,7 @@ const botonDeshacer = button({
     }
 });
 
+
 const botonReiniciar = button({
     contenido: "Reiniciar",
     padre: fila2,
@@ -752,10 +906,12 @@ const botonReiniciar = button({
     }
 });
 
+
 const botonAjustes = button({
     padre: fila2,
     peso: "1f"
 });
+
 
 const enlace = a({
     padre: botonAjustes,
@@ -776,6 +932,7 @@ style({
     }
 });
 
+
 style({
     elementos: [
         botonCasadosA,
@@ -791,12 +948,26 @@ style({
 
     estilos: {
         textAlign: "center",
-        margin: "0 15px 35px 15px",
+
+        margin: "0 8px 15px 8px",
+
         background: "#064C9C",
+
         color: "white",
-        paddingTop: "10px",
-        paddingBottom: "10px",
-        maxHeight: "50px",
-        marginTop: "30px",
+
+        paddingTop: "14px",
+        paddingBottom: "14px",
+
+        minHeight: "50px",
+
+        maxHeight: "none",
+
+        marginTop: "10px",
+
+        fontSize: "16px",
+
+        boxSizing: "border-box",
+
+        borderRadius: "5px",
     }
 });
