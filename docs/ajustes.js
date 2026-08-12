@@ -20,20 +20,19 @@ if ("serviceWorker" in navigator) {
 }
 
 // ============================================================
-// ESTILOS GLOBALES - MOBILE FIRST
+// ESTILOS GLOBALES
 // ============================================================
 
 style({
     elementos: [body],
     estilos: {
-        height: "100dvh",
         width: "100%",
+        minHeight: "100dvh",
         margin: "0",
         padding: "0",
-        overflow: "auto",
+        overflowX: "hidden",
+        overflowY: "auto",
         boxSizing: "border-box",
-        fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-        background: "#f5f7fa",
     }
 });
 
@@ -48,10 +47,10 @@ const columnaPrincipal = columna({
 style({
     elementos: [columnaPrincipal],
     estilos: {
-        minHeight: "100dvh",
         width: "100%",
+        minHeight: "100dvh",
+        padding: "16px",
         boxSizing: "border-box",
-        padding: "10px 12px 18px 12px",
     }
 });
 
@@ -59,28 +58,40 @@ style({
 // BOTONES DE GRUPOS
 // ============================================================
 
-const casadosA = button({ padre: columnaPrincipal });
+const casadosA = button({
+    padre: columnaPrincipal
+});
+
 const enlaceCasadosA = a({
     padre: casadosA,
     href: "editor.html?grupo=CasadosA",
     contenido: "Casados A"
 });
 
-const casadosB = button({ padre: columnaPrincipal });
+const casadosB = button({
+    padre: columnaPrincipal
+});
+
 const enlaceCasadosB = a({
     padre: casadosB,
     href: "editor.html?grupo=CasadosB",
     contenido: "Casados B"
 });
 
-const solterosA = button({ padre: columnaPrincipal });
+const solterosA = button({
+    padre: columnaPrincipal
+});
+
 const enlaceSolterosA = a({
     padre: solterosA,
     href: "editor.html?grupo=SolterosA",
     contenido: "Solteros A"
 });
 
-const solterosB = button({ padre: columnaPrincipal });
+const solterosB = button({
+    padre: columnaPrincipal
+});
+
 const enlaceSolterosB = a({
     padre: solterosB,
     href: "editor.html?grupo=SolterosB",
@@ -114,7 +125,7 @@ const salir = button({
 });
 
 // ============================================================
-// ESTILOS RESPONSIVE
+// ESTILO BOTONES
 // ============================================================
 
 style({
@@ -127,6 +138,7 @@ style({
     estilos: {
         width: "100%",
         minHeight: "52px",
+        height: "52px",
         margin: "8px 0",
         background: "#064C9C",
         color: "white",
@@ -143,7 +155,8 @@ style({
     estilos: {
         width: "100%",
         minHeight: "52px",
-        margin: "16px 0 8px 0",
+        height: "52px",
+        margin: "20px 0 8px 0",
         background: "#064C9C",
         color: "white",
         padding: "10px",
@@ -159,8 +172,9 @@ style({
     estilos: {
         width: "100%",
         minHeight: "52px",
+        height: "52px",
         margin: "8px 0",
-        background: "#555",
+        background: "#064C9C",
         color: "white",
         padding: "10px",
         fontSize: "18px",
@@ -169,6 +183,10 @@ style({
         touchAction: "manipulation",
     }
 });
+
+// ============================================================
+// ENLACES
+// ============================================================
 
 style({
     elementos: [
@@ -182,7 +200,7 @@ style({
         textDecoration: "none",
         display: "flex",
         width: "100%",
-        minHeight: "30px",
+        height: "100%",
         alignItems: "center",
         justifyContent: "center",
         boxSizing: "border-box",
@@ -194,12 +212,17 @@ style({
 // ============================================================
 
 function abrirSelectorExcel() {
-    const inputArchivo = document.createElement("input");
+
+    const inputArchivo =
+        document.createElement("input");
 
     inputArchivo.type = "file";
     inputArchivo.accept = ".xlsx,.xls";
 
-    inputArchivo.addEventListener("change", cargarExcelArchivo);
+    inputArchivo.addEventListener(
+        "change",
+        cargarExcelArchivo
+    );
 
     inputArchivo.click();
 }
@@ -209,25 +232,38 @@ function abrirSelectorExcel() {
 // ============================================================
 
 function cargarExcelArchivo(evento) {
-    const archivo = evento.target.files[0];
+
+    const archivo =
+        evento.target.files[0];
 
     if (!archivo) return;
 
-    const lector = new FileReader();
+    const lector =
+        new FileReader();
 
     lector.onload = function(e) {
-        const datos = new Uint8Array(e.target.result);
 
-        const libro = XLSX.read(datos, {
-            type: "array"
-        });
+        const datos =
+            new Uint8Array(e.target.result);
 
-        const nombreHoja = libro.SheetNames[0];
-        const hoja = libro.Sheets[nombreHoja];
+        const libro =
+            XLSX.read(datos, {
+                type: "array"
+            });
 
-        const filas = XLSX.utils.sheet_to_json(hoja, {
-            defval: ""
-        });
+        const nombreHoja =
+            libro.SheetNames[0];
+
+        const hoja =
+            libro.Sheets[nombreHoja];
+
+        const filas =
+            XLSX.utils.sheet_to_json(
+                hoja,
+                {
+                    defval: ""
+                }
+            );
 
         cargarPersonas(filas);
     };
@@ -236,28 +272,46 @@ function cargarExcelArchivo(evento) {
 }
 
 // ============================================================
-// SEPARAR PERSONAS POR GRUPO
+// SEPARAR PERSONAS
 // ============================================================
 
 function cargarPersonas(filas) {
+
     const casadosA = [];
     const casadosB = [];
     const solterosA = [];
     const solterosB = [];
 
     filas.forEach(fila => {
-        const nombre = String(fila.NOMBRE ?? "").trim();
-        const cualidad = String(fila.CUALIDAD ?? "").trim().toLowerCase();
+
+        const nombre =
+            String(
+                fila.NOMBRE ?? ""
+            ).trim();
+
+        const cualidad =
+            String(
+                fila.CUALIDAD ?? ""
+            )
+                .trim()
+                .toLowerCase();
 
         if (!nombre) return;
 
         if (cualidad === "matrimonio a") {
+
             casadosA.push(nombre);
+
         } else if (cualidad === "matrimonio b") {
+
             casadosB.push(nombre);
+
         } else if (cualidad === "soltero a") {
+
             solterosA.push(nombre);
+
         } else if (cualidad === "soltero b") {
+
             solterosB.push(nombre);
         }
     });

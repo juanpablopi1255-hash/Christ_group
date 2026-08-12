@@ -23,20 +23,18 @@ if ("serviceWorker" in navigator) {
 }
 
 // ============================================================
-// 1. ESTILOS GLOBALES - MOBILE FIRST
+// 1. ESTILOS GLOBALES
 // ============================================================
 
 style({
     elementos: [body],
     estilos: {
-        height: "100dvh",
         width: "100%",
+        height: "100dvh",
         margin: "0",
         padding: "0",
         overflow: "hidden",
         boxSizing: "border-box",
-        fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-        background: "#f5f7fa",
     }
 });
 
@@ -44,7 +42,20 @@ style({
 // 2. ESTRUCTURA
 // ============================================================
 
-const columnaBody = columna({ padre: body });
+const columnaBody = columna({
+    padre: body
+});
+
+style({
+    elementos: [columnaBody],
+    estilos: {
+        width: "100%",
+        height: "100%",
+        minHeight: "0",
+        boxSizing: "border-box",
+        padding: "8px",
+    }
+});
 
 const titulo = div({
     padre: columnaBody,
@@ -53,16 +64,16 @@ const titulo = div({
 
 const listas = div({
     padre: columnaBody,
-    peso: "5f"
+    peso: "4f"
 });
 
 const botones = div({
     padre: columnaBody,
-    peso: "2.2f"
+    peso: "2f"
 });
 
 style({
-    elementos: [columnaBody, titulo, listas, botones],
+    elementos: [titulo, listas, botones],
     estilos: {
         minHeight: "0",
         minWidth: "0",
@@ -83,9 +94,8 @@ style({
     elementos: [textoTitulo],
     estilos: {
         textAlign: "center",
-        fontSize: "clamp(28px, 8vw, 40px)",
-        fontWeight: "700",
-        margin: "12px 0 4px 0",
+        fontSize: "40px",
+        margin: "8px 0",
     }
 });
 
@@ -97,47 +107,34 @@ const filaListas = fila({
     padre: listas
 });
 
-const botonesLista = columna({
-    padre: filaListas,
-    peso: "1f"
-});
-
-const lista = columna({
-    padre: filaListas,
-    peso: "1f"
-});
-
-style({
-    elementos: [filaListas, botonesLista, lista],
-    estilos: {
-        minHeight: "0",
-        minWidth: "0",
-        boxSizing: "border-box",
-    }
-});
-
-// En móvil: botones de grupos arriba y grupos generados debajo.
 style({
     elementos: [filaListas],
     estilos: {
-        display: "grid",
-        gridTemplateColumns: "1fr",
-        gridTemplateRows: "auto minmax(0, 1fr)",
-        gap: "8px",
+        width: "100%",
         height: "100%",
-        padding: "0 10px",
+        minHeight: "0",
+        minWidth: "0",
+        display: "grid",
+        gridTemplateColumns: "minmax(110px, 0.8fr) minmax(0, 1.5fr)",
+        gap: "8px",
         boxSizing: "border-box",
     }
 });
 
+const botonesLista = columna({
+    padre: filaListas
+});
+
+const lista = columna({
+    padre: filaListas
+});
+
 style({
-    elementos: [botonesLista],
+    elementos: [botonesLista, lista],
     estilos: {
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: "8px",
         minHeight: "0",
         minWidth: "0",
+        boxSizing: "border-box",
     }
 });
 
@@ -154,13 +151,14 @@ style({
     estilos: {
         listStyleType: "none",
         margin: "0",
-        padding: "8px",
+        padding: "0",
+        width: "100%",
         boxSizing: "border-box",
     }
 });
 
 // ============================================================
-// 6. CUADRO DE LA LISTA + SCROLL
+// 6. CUADRO DE LA LISTA
 // ============================================================
 
 style({
@@ -252,7 +250,7 @@ const originalesSolterosB = datosSolterosB
 
 let casadosA = crearEstado({
     valorInicial: [...originalesCasadosA],
-    funcionDeActualizacion: (nuevoValor) => {
+    funcionDeActualizacion: nuevoValor => {
         mod({
             elemento: botonCasadosA,
             contenido: `Casados A: ${nuevoValor.length}`
@@ -262,7 +260,7 @@ let casadosA = crearEstado({
 
 let casadosB = crearEstado({
     valorInicial: [...originalesCasadosB],
-    funcionDeActualizacion: (nuevoValor) => {
+    funcionDeActualizacion: nuevoValor => {
         mod({
             elemento: botonCasadosB,
             contenido: `Casados B: ${nuevoValor.length}`
@@ -272,7 +270,7 @@ let casadosB = crearEstado({
 
 let solterosA = crearEstado({
     valorInicial: [...originalesSolterosA],
-    funcionDeActualizacion: (nuevoValor) => {
+    funcionDeActualizacion: nuevoValor => {
         mod({
             elemento: botonSolterosA,
             contenido: `Solteros A: ${nuevoValor.length}`
@@ -282,7 +280,7 @@ let solterosA = crearEstado({
 
 let solterosB = crearEstado({
     valorInicial: [...originalesSolterosB],
-    funcionDeActualizacion: (nuevoValor) => {
+    funcionDeActualizacion: nuevoValor => {
         mod({
             elemento: botonSolterosB,
             contenido: `Solteros B: ${nuevoValor.length}`
@@ -295,6 +293,7 @@ let solterosB = crearEstado({
 // ============================================================
 
 let grupo_actual = 1;
+
 let grupoActualElemento;
 let listaActual;
 
@@ -309,6 +308,7 @@ const historial = [];
 // ============================================================
 
 function crearGrupo(numero) {
+
     const contenedorGrupo = li({
         padre: listaGrupos
     });
@@ -362,6 +362,7 @@ function crearGrupo(numero) {
 // ============================================================
 
 const primerGrupo = crearGrupo(1);
+
 grupoActualElemento = primerGrupo.contenedor;
 listaActual = primerGrupo.lista;
 
@@ -370,6 +371,7 @@ listaActual = primerGrupo.lista;
 // ============================================================
 
 function cambiarDeGrupo() {
+
     grupo_actual++;
 
     const nuevoGrupo = crearGrupo(grupo_actual);
@@ -389,10 +391,14 @@ function cambiarDeGrupo() {
 // ============================================================
 
 function anadirALaLista(grupo) {
+
     if (grupo.valor.length === 0) return;
 
-    const indice = Math.floor(Math.random() * grupo.valor.length);
-    const miembro = grupo.valor[indice];
+    const indice =
+        Math.floor(Math.random() * grupo.valor.length);
+
+    const miembro =
+        grupo.valor[indice];
 
     const elemento = li({
         padre: listaActual,
@@ -404,6 +410,7 @@ function anadirALaLista(grupo) {
         estilos: {
             fontSize: "18px",
             padding: "3px 0",
+            overflowWrap: "anywhere",
         }
     });
 
@@ -415,7 +422,8 @@ function anadirALaLista(grupo) {
         elemento: elemento
     });
 
-    grupo.valor = grupo.valor.filter((_, i) => i !== indice);
+    grupo.valor =
+        grupo.valor.filter((_, i) => i !== indice);
 }
 
 // ============================================================
@@ -423,11 +431,13 @@ function anadirALaLista(grupo) {
 // ============================================================
 
 function deshacer() {
+
     if (historial.length === 0) return;
 
     const ultimaAccion = historial.pop();
 
     if (ultimaAccion.tipo === "miembro") {
+
         const grupo = ultimaAccion.grupo;
         const miembro = ultimaAccion.miembro;
         const indice = ultimaAccion.indice;
@@ -439,19 +449,27 @@ function deshacer() {
         ];
 
         ultimaAccion.elemento.remove();
+
         return;
     }
 
     if (ultimaAccion.tipo === "grupo") {
+
         ultimaAccion.elemento.remove();
+
         grupo_actual--;
 
         const grupos = [...listaGrupos.children];
 
         if (grupos.length > 0) {
-            const ultimoGrupo = grupos[grupos.length - 1];
+
+            const ultimoGrupo =
+                grupos[grupos.length - 1];
+
             grupoActualElemento = ultimoGrupo;
-            listaActual = ultimoGrupo.querySelector("ol");
+
+            listaActual =
+                ultimoGrupo.querySelector("ol");
         }
     }
 }
@@ -461,6 +479,7 @@ function deshacer() {
 // ============================================================
 
 function reiniciar() {
+
     listaGrupos.innerHTML = "";
 
     casadosA.valor = [...originalesCasadosA];
@@ -469,42 +488,60 @@ function reiniciar() {
     solterosB.valor = [...originalesSolterosB];
 
     historial.length = 0;
+
     grupo_actual = 1;
 
     const primerGrupo = crearGrupo(1);
+
     grupoActualElemento = primerGrupo.contenedor;
     listaActual = primerGrupo.lista;
 }
 
 // ============================================================
-// 19. OBTENER TEXTO DEL GRUPO
+// 19. OBTENER TEXTO
 // ============================================================
 
 function obtenerTextoGrupo(grupoElemento) {
-    const tituloGrupo = grupoElemento.querySelector("p");
-    const integrantes = [...grupoElemento.querySelectorAll("ol li")];
 
-    let texto = `${tituloGrupo.textContent}\n\n`;
+    const tituloGrupo =
+        grupoElemento.querySelector("p");
+
+    const integrantes =
+        [...grupoElemento.querySelectorAll("ol li")];
+
+    let texto =
+        `${tituloGrupo.textContent}\n\n`;
 
     integrantes.forEach((elemento, indice) => {
-        texto += `${indice + 1}. ${elemento.textContent}\n`;
+
+        texto +=
+            `${indice + 1}. ${elemento.textContent}\n`;
     });
 
     return texto.trim();
 }
 
 // ============================================================
-// 20. ABRIR WHATSAPP
+// 20. WHATSAPP
 // ============================================================
 
 function compartirEnWhatsApp(texto) {
-    const mensaje = encodeURIComponent(texto);
 
-    const esMovil = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const mensaje =
+        encodeURIComponent(texto);
+
+    const esMovil =
+        /Android|iPhone|iPad|iPod/i.test(
+            navigator.userAgent
+        );
 
     if (esMovil) {
-        window.location.href = `whatsapp://send?text=${mensaje}`;
+
+        window.location.href =
+            `whatsapp://send?text=${mensaje}`;
+
     } else {
+
         window.location.href =
             `https://web.whatsapp.com/send?text=${mensaje}`;
     }
@@ -515,11 +552,15 @@ function compartirEnWhatsApp(texto) {
 // ============================================================
 
 function compartirGrupo() {
-    const grupos = [...listaGrupos.children];
+
+    const grupos =
+        [...listaGrupos.children];
 
     if (grupos.length === 0) return;
 
-    const fondo = div({ padre: body });
+    const fondo = div({
+        padre: body
+    });
 
     style({
         elementos: [fondo],
@@ -528,30 +569,31 @@ function compartirGrupo() {
             inset: "0",
             width: "100%",
             height: "100%",
-            background: "rgba(0,0,0,0.45)",
+            background: "rgba(0,0,0,0.4)",
             zIndex: "999",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "16px",
-            boxSizing: "border-box",
         }
     });
 
-    const ventana = div({ padre: fondo });
+    const ventana = div({
+        padre: fondo
+    });
 
     style({
         elementos: [ventana],
         estilos: {
-            width: "100%",
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "calc(100% - 32px)",
             maxWidth: "400px",
-            maxHeight: "90dvh",
+            maxHeight: "80dvh",
             overflowY: "auto",
             background: "white",
-            border: "2px solid #064C9C",
-            padding: "18px",
+            border: "3px solid #064C9C",
+            padding: "20px",
             boxSizing: "border-box",
-            borderRadius: "14px",
+            borderRadius: "10px",
             textAlign: "center",
         }
     });
@@ -564,20 +606,23 @@ function compartirGrupo() {
     style({
         elementos: [tituloVentana],
         estilos: {
-            fontSize: "20px",
-            fontWeight: "700",
-            margin: "0 0 14px 0",
+            fontSize: "22px",
+            margin: "0 0 20px 0",
         }
     });
 
     grupos.forEach((grupoElemento, indice) => {
+
         const botonGrupo = button({
             padre: ventana,
             contenido: `Grupo ${indice + 1}`,
             funcionalidad: {
                 click: () => {
-                    const texto = obtenerTextoGrupo(grupoElemento);
+                    const texto =
+                        obtenerTextoGrupo(grupoElemento);
+
                     fondo.remove();
+
                     compartirEnWhatsApp(texto);
                 }
             }
@@ -619,6 +664,7 @@ function compartirGrupo() {
             color: "white",
             fontSize: "17px",
             borderRadius: "8px",
+            boxSizing: "border-box",
         }
     });
 }
@@ -631,33 +677,35 @@ const columna_principal_botones = columna({
     padre: botones
 });
 
-const fila1 = fila({
-    padre: columna_principal_botones,
-    peso: "1f"
-});
-
-const fila2 = fila({
-    padre: columna_principal_botones,
-    peso: "1f"
-});
-
 style({
     elementos: [columna_principal_botones],
     estilos: {
+        width: "100%",
+        height: "100%",
         minHeight: "0",
-        padding: "4px 10px 8px 10px",
+        padding: "4px 0",
         boxSizing: "border-box",
     }
+});
+
+const fila1 = fila({
+    padre: columna_principal_botones
+});
+
+const fila2 = fila({
+    padre: columna_principal_botones
 });
 
 style({
     elementos: [fila1, fila2],
     estilos: {
+        width: "100%",
+        minHeight: "0",
+        minWidth: "0",
         display: "grid",
         gridTemplateColumns: "1fr 1fr",
         gap: "8px",
-        minHeight: "0",
-        minWidth: "0",
+        boxSizing: "border-box",
     }
 });
 
@@ -668,7 +716,6 @@ style({
 const pasarDeGrupoBoton = button({
     contenido: "Siguiente grupo",
     padre: fila1,
-    peso: "1f",
     funcionalidad: {
         click: cambiarDeGrupo
     }
@@ -677,7 +724,6 @@ const pasarDeGrupoBoton = button({
 const compartirBoton = button({
     contenido: "Compartir",
     padre: fila1,
-    peso: "1f",
     funcionalidad: {
         click: compartirGrupo
     }
@@ -686,7 +732,6 @@ const compartirBoton = button({
 const botonDeshacer = button({
     contenido: "Deshacer",
     padre: fila2,
-    peso: "1f",
     funcionalidad: {
         click: deshacer
     }
@@ -695,15 +740,13 @@ const botonDeshacer = button({
 const botonReiniciar = button({
     contenido: "Reiniciar",
     padre: fila2,
-    peso: "1f",
     funcionalidad: {
         click: reiniciar
     }
 });
 
 const botonAjustes = button({
-    padre: fila2,
-    peso: "1f"
+    padre: fila2
 });
 
 const enlace = a({
@@ -726,6 +769,7 @@ style({
         height: "100%",
         alignItems: "center",
         justifyContent: "center",
+        boxSizing: "border-box",
     }
 });
 
@@ -742,14 +786,14 @@ style({
         botonReiniciar
     ],
     estilos: {
-        textAlign: "center",
+        width: "100%",
+        minWidth: "0",
+        minHeight: "48px",
+        height: "100%",
         margin: "0",
         background: "#064C9C",
         color: "white",
         padding: "10px 6px",
-        minHeight: "46px",
-        height: "100%",
-        maxHeight: "58px",
         fontSize: "15px",
         borderRadius: "8px",
         boxSizing: "border-box",
