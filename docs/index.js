@@ -14,13 +14,6 @@ import {
     ul
 } from "./libreria.js";
 
-if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./sw.js")
-            .then(() => console.log("Service Worker registrado"))
-            .catch(error => console.error("Error registrando Service Worker:", error));
-    });
-}
 
 // ============================================================
 // 1. ESTILOS GLOBALES
@@ -29,14 +22,14 @@ if ("serviceWorker" in navigator) {
 style({
     elementos: [body],
     estilos: {
-        width: "100%",
-        height: "100dvh",
+        height: "100vh",
+        width: "100vw",
         margin: "0",
         padding: "0",
         overflow: "hidden",
-        boxSizing: "border-box",
     }
 });
+
 
 // ============================================================
 // 2. ESTRUCTURA
@@ -46,20 +39,9 @@ const columnaBody = columna({
     padre: body
 });
 
-style({
-    elementos: [columnaBody],
-    estilos: {
-        width: "100%",
-        height: "100%",
-        minHeight: "0",
-        boxSizing: "border-box",
-        padding: "8px",
-    }
-});
-
 const titulo = div({
     padre: columnaBody,
-    peso: "0.8f"
+    peso: "1f"
 });
 
 const listas = div({
@@ -73,13 +55,12 @@ const botones = div({
 });
 
 style({
-    elementos: [titulo, listas, botones],
+    elementos: [columnaBody, listas, botones],
     estilos: {
         minHeight: "0",
-        minWidth: "0",
-        boxSizing: "border-box",
     }
 });
+
 
 // ============================================================
 // 3. TÍTULO
@@ -95,9 +76,9 @@ style({
     estilos: {
         textAlign: "center",
         fontSize: "40px",
-        margin: "8px 0",
     }
 });
+
 
 // ============================================================
 // 4. ZONA PRINCIPAL
@@ -107,36 +88,23 @@ const filaListas = fila({
     padre: listas
 });
 
-style({
-    elementos: [filaListas],
-    estilos: {
-        width: "100%",
-        height: "100%",
-        minHeight: "0",
-        minWidth: "0",
-        display: "grid",
-        gridTemplateColumns: "minmax(110px, 0.8fr) minmax(0, 1.5fr)",
-        gap: "8px",
-        boxSizing: "border-box",
-    }
-});
-
 const botonesLista = columna({
-    padre: filaListas
+    padre: filaListas,
+    peso: "1f"
 });
 
 const lista = columna({
-    padre: filaListas
+    padre: filaListas,
+    peso: "1f"
 });
 
 style({
-    elementos: [botonesLista, lista],
+    elementos: [filaListas, botonesLista, lista],
     estilos: {
         minHeight: "0",
-        minWidth: "0",
-        boxSizing: "border-box",
     }
 });
+
 
 // ============================================================
 // 5. LISTA DE GRUPOS
@@ -150,34 +118,33 @@ style({
     elementos: [listaGrupos],
     estilos: {
         listStyleType: "none",
-        margin: "0",
+        margin: "10px 0 0 0",
         padding: "0",
-        width: "100%",
-        boxSizing: "border-box",
     }
 });
 
+
 // ============================================================
-// 6. CUADRO DE LA LISTA
+// 6. CUADRO DE LA LISTA + SCROLL
 // ============================================================
 
 style({
     elementos: [lista],
     estilos: {
         textAlign: "left",
-        border: "2px solid #222",
-        borderRadius: "10px",
+        marginLeft: "10px",
+        marginRight: "10px",
+        border: "4px solid black",
         width: "100%",
         height: "100%",
         background: "white",
         boxSizing: "border-box",
         minHeight: "0",
-        minWidth: "0",
         overflowY: "auto",
         overflowX: "hidden",
-        WebkitOverflowScrolling: "touch",
     }
 });
+
 
 // ============================================================
 // 7. BOTONES DE LOS GRUPOS
@@ -187,7 +154,9 @@ const botonCasadosA = button({
     padre: botonesLista,
     contenido: "Casados A: 0",
     funcionalidad: {
-        click: () => anadirALaLista(casadosA)
+        click: () => {
+            anadirALaLista(casadosA);
+        }
     }
 });
 
@@ -195,7 +164,9 @@ const botonCasadosB = button({
     padre: botonesLista,
     contenido: "Casados B: 0",
     funcionalidad: {
-        click: () => anadirALaLista(casadosB)
+        click: () => {
+            anadirALaLista(casadosB);
+        }
     }
 });
 
@@ -203,7 +174,9 @@ const botonSolterosA = button({
     padre: botonesLista,
     contenido: "Solteros A: 0",
     funcionalidad: {
-        click: () => anadirALaLista(solterosA)
+        click: () => {
+            anadirALaLista(solterosA);
+        }
     }
 });
 
@@ -211,18 +184,29 @@ const botonSolterosB = button({
     padre: botonesLista,
     contenido: "Solteros B: 0",
     funcionalidad: {
-        click: () => anadirALaLista(solterosB)
+        click: () => {
+            anadirALaLista(solterosB);
+        }
     }
 });
+
 
 // ============================================================
 // 8. LOCAL STORAGE
 // ============================================================
 
-const datosCasadosA = localStorage.getItem("lista_CasadosA");
-const datosCasadosB = localStorage.getItem("lista_CasadosB");
-const datosSolterosA = localStorage.getItem("lista_SolterosA");
-const datosSolterosB = localStorage.getItem("lista_SolterosB");
+const datosCasadosA =
+    localStorage.getItem("lista_CasadosA");
+
+const datosCasadosB =
+    localStorage.getItem("lista_CasadosB");
+
+const datosSolterosA =
+    localStorage.getItem("lista_SolterosA");
+
+const datosSolterosB =
+    localStorage.getItem("lista_SolterosB");
+
 
 // ============================================================
 // 9. LISTAS ORIGINALES
@@ -244,13 +228,15 @@ const originalesSolterosB = datosSolterosB
     ? [...JSON.parse(datosSolterosB).integrantes]
     : [];
 
+
 // ============================================================
 // 10. ESTADOS
 // ============================================================
 
 let casadosA = crearEstado({
     valorInicial: [...originalesCasadosA],
-    funcionDeActualizacion: nuevoValor => {
+
+    funcionDeActualizacion: (nuevoValor) => {
         mod({
             elemento: botonCasadosA,
             contenido: `Casados A: ${nuevoValor.length}`
@@ -260,7 +246,8 @@ let casadosA = crearEstado({
 
 let casadosB = crearEstado({
     valorInicial: [...originalesCasadosB],
-    funcionDeActualizacion: nuevoValor => {
+
+    funcionDeActualizacion: (nuevoValor) => {
         mod({
             elemento: botonCasadosB,
             contenido: `Casados B: ${nuevoValor.length}`
@@ -270,7 +257,8 @@ let casadosB = crearEstado({
 
 let solterosA = crearEstado({
     valorInicial: [...originalesSolterosA],
-    funcionDeActualizacion: nuevoValor => {
+
+    funcionDeActualizacion: (nuevoValor) => {
         mod({
             elemento: botonSolterosA,
             contenido: `Solteros A: ${nuevoValor.length}`
@@ -280,13 +268,15 @@ let solterosA = crearEstado({
 
 let solterosB = crearEstado({
     valorInicial: [...originalesSolterosB],
-    funcionDeActualizacion: nuevoValor => {
+
+    funcionDeActualizacion: (nuevoValor) => {
         mod({
             elemento: botonSolterosB,
             contenido: `Solteros B: ${nuevoValor.length}`
         });
     }
 });
+
 
 // ============================================================
 // 11. GRUPO ACTUAL
@@ -297,11 +287,13 @@ let grupo_actual = 1;
 let grupoActualElemento;
 let listaActual;
 
+
 // ============================================================
 // 12. HISTORIAL
 // ============================================================
 
 const historial = [];
+
 
 // ============================================================
 // 13. CREAR GRUPO
@@ -317,7 +309,7 @@ function crearGrupo(numero) {
         elementos: [contenedorGrupo],
         estilos: {
             listStyleType: "none",
-            margin: "0 0 14px 0",
+            margin: "0",
             padding: "0",
         }
     });
@@ -330,8 +322,7 @@ function crearGrupo(numero) {
     style({
         elementos: [tituloGrupo],
         estilos: {
-            fontSize: "20px",
-            fontWeight: "700",
+            fontSize: "25px",
             color: "#064C9C",
             margin: "0 0 5px 0",
         }
@@ -344,10 +335,7 @@ function crearGrupo(numero) {
     style({
         elementos: [nuevaLista],
         estilos: {
-            fontSize: "18px",
-            marginTop: "4px",
-            marginBottom: "0",
-            paddingLeft: "28px",
+            fontSize: "20px",
         }
     });
 
@@ -357,6 +345,7 @@ function crearGrupo(numero) {
     };
 }
 
+
 // ============================================================
 // 14. GRUPO 1
 // ============================================================
@@ -365,6 +354,7 @@ const primerGrupo = crearGrupo(1);
 
 grupoActualElemento = primerGrupo.contenedor;
 listaActual = primerGrupo.lista;
+
 
 // ============================================================
 // 15. CAMBIAR DE GRUPO
@@ -379,12 +369,14 @@ function cambiarDeGrupo() {
     grupoActualElemento = nuevoGrupo.contenedor;
     listaActual = nuevoGrupo.lista;
 
+    // Guardamos que se creó un grupo
     historial.push({
         tipo: "grupo",
         elemento: nuevoGrupo.contenedor,
         grupoAnterior: grupo_actual - 1
     });
 }
+
 
 // ============================================================
 // 16. AÑADIR PERSONA
@@ -408,9 +400,7 @@ function anadirALaLista(grupo) {
     style({
         elementos: [elemento],
         estilos: {
-            fontSize: "18px",
-            padding: "3px 0",
-            overflowWrap: "anywhere",
+            fontSize: "20px",
         }
     });
 
@@ -426,6 +416,7 @@ function anadirALaLista(grupo) {
         grupo.valor.filter((_, i) => i !== indice);
 }
 
+
 // ============================================================
 // 17. DESHACER
 // ============================================================
@@ -435,6 +426,11 @@ function deshacer() {
     if (historial.length === 0) return;
 
     const ultimaAccion = historial.pop();
+
+
+    // --------------------------------------------------------
+    // DESHACER MIEMBRO
+    // --------------------------------------------------------
 
     if (ultimaAccion.tipo === "miembro") {
 
@@ -453,13 +449,19 @@ function deshacer() {
         return;
     }
 
+
+    // --------------------------------------------------------
+    // DESHACER GRUPO
+    // --------------------------------------------------------
+
     if (ultimaAccion.tipo === "grupo") {
 
         ultimaAccion.elemento.remove();
 
         grupo_actual--;
 
-        const grupos = [...listaGrupos.children];
+        const grupos =
+            [...listaGrupos.children];
 
         if (grupos.length > 0) {
 
@@ -470,9 +472,11 @@ function deshacer() {
 
             listaActual =
                 ultimoGrupo.querySelector("ol");
+
         }
     }
 }
+
 
 // ============================================================
 // 18. REINICIAR
@@ -497,8 +501,9 @@ function reiniciar() {
     listaActual = primerGrupo.lista;
 }
 
+
 // ============================================================
-// 19. OBTENER TEXTO
+// 19. OBTENER TEXTO DEL GRUPO
 // ============================================================
 
 function obtenerTextoGrupo(grupoElemento) {
@@ -516,13 +521,15 @@ function obtenerTextoGrupo(grupoElemento) {
 
         texto +=
             `${indice + 1}. ${elemento.textContent}\n`;
+
     });
 
     return texto.trim();
 }
 
+
 // ============================================================
-// 20. WHATSAPP
+// 20. ABRIR WHATSAPP
 // ============================================================
 
 function compartirEnWhatsApp(texto) {
@@ -544,8 +551,10 @@ function compartirEnWhatsApp(texto) {
 
         window.location.href =
             `https://web.whatsapp.com/send?text=${mensaje}`;
+
     }
 }
+
 
 // ============================================================
 // 21. SELECCIONAR GRUPO PARA COMPARTIR
@@ -558,6 +567,7 @@ function compartirGrupo() {
 
     if (grupos.length === 0) return;
 
+
     const fondo = div({
         padre: body
     });
@@ -566,13 +576,15 @@ function compartirGrupo() {
         elementos: [fondo],
         estilos: {
             position: "fixed",
-            inset: "0",
-            width: "100%",
-            height: "100%",
+            top: "0",
+            left: "0",
+            width: "100vw",
+            height: "100vh",
             background: "rgba(0,0,0,0.4)",
             zIndex: "999",
         }
     });
+
 
     const ventana = div({
         padre: fondo
@@ -585,10 +597,8 @@ function compartirGrupo() {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: "calc(100% - 32px)",
+            width: "80%",
             maxWidth: "400px",
-            maxHeight: "80dvh",
-            overflowY: "auto",
             background: "white",
             border: "3px solid #064C9C",
             padding: "20px",
@@ -597,6 +607,7 @@ function compartirGrupo() {
             textAlign: "center",
         }
     });
+
 
     const tituloVentana = p({
         padre: ventana,
@@ -611,15 +622,20 @@ function compartirGrupo() {
         }
     });
 
+
     grupos.forEach((grupoElemento, indice) => {
 
         const botonGrupo = button({
             padre: ventana,
             contenido: `Grupo ${indice + 1}`,
+
             funcionalidad: {
                 click: () => {
+
                     const texto =
-                        obtenerTextoGrupo(grupoElemento);
+                        obtenerTextoGrupo(
+                            grupoElemento
+                        );
 
                     fondo.remove();
 
@@ -633,23 +649,24 @@ function compartirGrupo() {
             estilos: {
                 display: "block",
                 width: "100%",
-                minHeight: "48px",
-                margin: "8px 0",
+                margin: "10px 0",
                 padding: "10px",
                 background: "#064C9C",
                 color: "white",
-                fontSize: "17px",
-                borderRadius: "8px",
-                boxSizing: "border-box",
+                fontSize: "18px",
             }
         });
     });
 
+
     const botonCancelar = button({
         padre: ventana,
         contenido: "Cancelar",
+
         funcionalidad: {
-            click: () => fondo.remove()
+            click: () => {
+                fondo.remove();
+            }
         }
     });
 
@@ -657,17 +674,15 @@ function compartirGrupo() {
         elementos: [botonCancelar],
         estilos: {
             width: "100%",
-            minHeight: "46px",
-            marginTop: "10px",
+            marginTop: "15px",
             padding: "10px",
             background: "#777",
             color: "white",
-            fontSize: "17px",
-            borderRadius: "8px",
-            boxSizing: "border-box",
+            fontSize: "18px",
         }
     });
 }
+
 
 // ============================================================
 // 22. BOTONES INFERIORES
@@ -677,61 +692,51 @@ const columna_principal_botones = columna({
     padre: botones
 });
 
-style({
-    elementos: [columna_principal_botones],
-    estilos: {
-        width: "100%",
-        height: "100%",
-        minHeight: "0",
-        padding: "4px 0",
-        boxSizing: "border-box",
-    }
-});
-
 const fila1 = fila({
-    padre: columna_principal_botones
+    padre: columna_principal_botones,
+    peso: "1f"
 });
 
 const fila2 = fila({
-    padre: columna_principal_botones
+    padre: columna_principal_botones,
+    peso: "1f"
 });
 
-style({
-    elementos: [fila1, fila2],
-    estilos: {
-        width: "100%",
-        minHeight: "0",
-        minWidth: "0",
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: "8px",
-        boxSizing: "border-box",
-    }
-});
 
 // ============================================================
-// 23. BOTONES
+// 23. FILA 1
 // ============================================================
 
 const pasarDeGrupoBoton = button({
-    contenido: "Siguiente grupo",
+    contenido: "siguiente grupo",
     padre: fila1,
+    peso: "2f",
+
     funcionalidad: {
         click: cambiarDeGrupo
     }
 });
 
 const compartirBoton = button({
-    contenido: "Compartir",
+    contenido: "compartir",
     padre: fila1,
+    peso: "1f",
+
     funcionalidad: {
         click: compartirGrupo
     }
 });
 
+
+// ============================================================
+// 24. FILA 2
+// ============================================================
+
 const botonDeshacer = button({
     contenido: "Deshacer",
     padre: fila2,
+    peso: "1f",
+
     funcionalidad: {
         click: deshacer
     }
@@ -740,23 +745,27 @@ const botonDeshacer = button({
 const botonReiniciar = button({
     contenido: "Reiniciar",
     padre: fila2,
+    peso: "1f",
+
     funcionalidad: {
         click: reiniciar
     }
 });
 
 const botonAjustes = button({
-    padre: fila2
+    padre: fila2,
+    peso: "1f"
 });
 
 const enlace = a({
     padre: botonAjustes,
     href: "ajustes.html",
-    contenido: "Ajustes"
+    contenido: "ajustes"
 });
 
+
 // ============================================================
-// 24. ESTILOS DE TODOS LOS BOTONES
+// 25. ESTILOS DE LOS BOTONES
 // ============================================================
 
 style({
@@ -764,12 +773,6 @@ style({
     estilos: {
         color: "white",
         textDecoration: "none",
-        display: "flex",
-        width: "100%",
-        height: "100%",
-        alignItems: "center",
-        justifyContent: "center",
-        boxSizing: "border-box",
     }
 });
 
@@ -785,18 +788,15 @@ style({
         botonDeshacer,
         botonReiniciar
     ],
+
     estilos: {
-        width: "100%",
-        minWidth: "0",
-        minHeight: "48px",
-        height: "100%",
-        margin: "0",
+        textAlign: "center",
+        margin: "0 15px 35px 15px",
         background: "#064C9C",
         color: "white",
-        padding: "10px 6px",
-        fontSize: "15px",
-        borderRadius: "8px",
-        boxSizing: "border-box",
-        touchAction: "manipulation",
+        paddingTop: "10px",
+        paddingBottom: "10px",
+        maxHeight: "50px",
+        marginTop: "30px",
     }
 });
